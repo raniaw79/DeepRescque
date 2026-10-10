@@ -10,9 +10,12 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 touchStart;
     private bool isDragging;
 
+    private SpriteRenderer spriteRenderer;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -50,7 +53,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        // الماوس يستخدم لاختبار اللمس داخل الـ Simulator
+        // Mouse للاختبار داخل Simulator
         if (Input.GetMouseButtonDown(0))
         {
             touchStart = Input.mousePosition;
@@ -59,7 +62,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetMouseButton(0) && isDragging)
         {
-            Vector2 dragDirection = (Vector2)Input.mousePosition - touchStart;
+            Vector2 dragDirection =
+                (Vector2)Input.mousePosition - touchStart;
 
             if (dragDirection.magnitude > 20f)
             {
@@ -71,6 +75,18 @@ public class PlayerMovement : MonoBehaviour
         {
             isDragging = false;
             movement = Vector2.zero;
+        }
+
+        // Flip حسب اتجاه الحركة
+        if (movement.x > 0.05f)
+        {
+            // يتحرك لليمين
+            spriteRenderer.flipX = false;
+        }
+        else if (movement.x < -0.05f)
+        {
+            // يتحرك لليسار
+            spriteRenderer.flipX = true;
         }
     }
 
